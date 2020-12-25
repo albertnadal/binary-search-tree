@@ -1,8 +1,13 @@
-GXX=g++
+CXX=g++
+CFLAGS=-std=c++14 -O3
+LDFLAGS=
 EXEC=bst
 
-all:
-	$(GXX) -O3 -std=c++14 main.cpp -o $(EXEC)
+all: bst.o
+	$(CXX) ${CFLAGS} $(LDFLAGS) main.cpp -o $(EXEC)
+
+bst.o: bst.cpp
+	$(CXX) -c $(CFLAGS) bst.cpp
 
 clean:
-	rm -f $(EXEC)
+	rm -f $(EXEC) *.o *.gch
