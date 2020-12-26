@@ -17,6 +17,7 @@ class BST {
 
 private:
     BSTNode *root = nullptr;
+    unsigned int size = 0;
     void GetValuesInOrder(std::unordered_map<int, std::string> &l, BSTNode *node);
     void GetValuesPreOrder(std::unordered_map<int, std::string> &l, BSTNode *node);
     void GetValuesPostOrder(std::unordered_map<int, std::string> &l, BSTNode *node);
@@ -28,6 +29,8 @@ public:
     void Insert(int, const std::string &);
     BSTNode *Search(int);
     void Delete(int);
+    bool IsEmpty();
+    unsigned int Size();
     std::unordered_map<int, std::string> GetValues(BSTTraverseMode mode);
 };
 
@@ -37,11 +40,20 @@ BST::~BST() {
     this->DeleteTree(this->root);
 }
 
+bool BST::IsEmpty() {
+    return this->size == 0;
+}
+
+unsigned int BST::Size() {
+    return this->size;
+}
+
 void BST::DeleteTree(BSTNode *node) {
     if (node == nullptr) return;
     this->DeleteTree(node->left);
     this->DeleteTree(node->right);
     delete node;
+    this->size--;
 }
 
 std::unordered_map<int, std::string> BST::GetValues(BSTTraverseMode mode) {
@@ -112,6 +124,7 @@ void BST::Delete(int key) {
         if (currentNodeIsLeftBranch) parentNode->left = nullptr;
         else parentNode->right = nullptr;
         delete currentNode;
+        this->size--;
         if (currentNodeIsRootNode) delete parentNode;
         return;
     }
@@ -127,6 +140,7 @@ void BST::Delete(int key) {
             if (currentNodeIsLeftBranch) parentNode->left = auxCurrentNode;
             else parentNode->right = auxCurrentNode;
             delete currentNode;
+            this->size--;
             if (currentNodeIsRootNode) {
                 this->root = auxCurrentNode;
                 delete parentNode;
@@ -145,6 +159,7 @@ void BST::Delete(int key) {
         if (currentNodeIsLeftBranch) parentNode->left = auxCurrentNode;
         else parentNode->right = auxCurrentNode;
         delete currentNode;
+        this->size--;
         if (currentNodeIsRootNode) {
             this->root = auxCurrentNode;
             delete parentNode;
@@ -161,6 +176,7 @@ void BST::Delete(int key) {
             delete parentNode;
         }
         delete currentNode;
+        this->size--;
         return;
     }
 
@@ -185,6 +201,7 @@ void BST::Insert(int key, const std::string &value) {
 
     if (this->root == nullptr) {
         this->root = node;
+        this->size++;
         return;
     }
 
@@ -193,6 +210,7 @@ void BST::Insert(int key, const std::string &value) {
         if (node->key < currentNode->key) {
             if (currentNode->left == nullptr) {
                 currentNode->left = node;
+                this->size++;
                 break;
             } else {
                 currentNode = currentNode->left;
@@ -200,6 +218,7 @@ void BST::Insert(int key, const std::string &value) {
         } else {
             if (currentNode->right == nullptr) {
                 currentNode->right = node;
+                this->size++;
                 break;
             } else {
                 currentNode = currentNode->right;
