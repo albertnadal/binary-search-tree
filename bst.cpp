@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
-#include <unordered_map>
+#include <list>
+#include <utility>
 
 enum BSTTraverseMode {
     PREORDER, INORDER, POSTORDER
@@ -18,9 +19,9 @@ class BST {
 private:
     BSTNode *root = nullptr;
     unsigned int size = 0;
-    void GetValuesInOrder(std::unordered_map<int, std::string> &l, BSTNode *node);
-    void GetValuesPreOrder(std::unordered_map<int, std::string> &l, BSTNode *node);
-    void GetValuesPostOrder(std::unordered_map<int, std::string> &l, BSTNode *node);
+    void GetValuesInOrder(std::list<std::pair<int, std::string>> &l, BSTNode *node);
+    void GetValuesPreOrder(std::list<std::pair<int, std::string>> &l, BSTNode *node);
+    void GetValuesPostOrder(std::list<std::pair<int, std::string>> &l, BSTNode *node);
     void DeleteTree(BSTNode *);
 
 public:
@@ -31,7 +32,7 @@ public:
     void Delete(int);
     bool IsEmpty();
     unsigned int Size();
-    std::unordered_map<int, std::string> GetValues(BSTTraverseMode mode);
+    std::list<std::pair<int, std::string>> GetValues(BSTTraverseMode mode);
 };
 
 BST::BST() = default;
@@ -56,8 +57,8 @@ void BST::DeleteTree(BSTNode *node) {
     this->size--;
 }
 
-std::unordered_map<int, std::string> BST::GetValues(BSTTraverseMode mode) {
-    std::unordered_map<int, std::string> l;
+std::list<std::pair<int, std::string>> BST::GetValues(BSTTraverseMode mode) {
+    std::list<std::pair<int, std::string>> l;
     switch (mode) {
         case INORDER:
             this->GetValuesInOrder(l, this->root);
@@ -75,25 +76,25 @@ std::unordered_map<int, std::string> BST::GetValues(BSTTraverseMode mode) {
     return l;
 }
 
-void BST::GetValuesInOrder(std::unordered_map<int, std::string> &m, BSTNode *node) {
+void BST::GetValuesInOrder(std::list<std::pair<int, std::string>> &m, BSTNode *node) {
     if (node == nullptr) return;
     this->GetValuesInOrder(m, node->left);
-    m.insert({node->key, node->value});
+    m.push_back({node->key, node->value});
     this->GetValuesInOrder(m, node->right);
 }
 
-void BST::GetValuesPreOrder(std::unordered_map<int, std::string> &m, BSTNode *node) {
+void BST::GetValuesPreOrder(std::list<std::pair<int, std::string>> &m, BSTNode *node) {
     if (node == nullptr) return;
-    m.insert({node->key, node->value});
+    m.push_back({node->key, node->value});
     this->GetValuesPreOrder(m, node->left);
     this->GetValuesPreOrder(m, node->right);
 }
 
-void BST::GetValuesPostOrder(std::unordered_map<int, std::string> &m, BSTNode *node) {
+void BST::GetValuesPostOrder(std::list<std::pair<int, std::string>> &m, BSTNode *node) {
     if (node == nullptr) return;
     this->GetValuesPostOrder(m, node->left);
     this->GetValuesPostOrder(m, node->right);
-    m.insert({node->key, node->value});
+    m.push_back({node->key, node->value});
 }
 
 void BST::Delete(int key) {

@@ -12,6 +12,7 @@ _deps
 cmake-build-debug
 tests/Google_tests.cbp
 tests/Makefile
+tests/lib/
 .DS_Store
 .idea
 bst
